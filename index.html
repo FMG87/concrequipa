@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Concrequipa</title>
 
+  <!-- PWA -->
+  <meta name="theme-color" content="#000000" />
+  <link rel="manifest" href="/manifest.json" />
+
   <style>
     html, body {
       margin: 0;
@@ -35,6 +39,8 @@
       border-radius: 12px;
       overflow: hidden;
       background: #000;
+      display: flex;
+      flex-direction: column;
     }
 
     iframe {
@@ -42,6 +48,7 @@
       height: 100%;
       border: none;
       display: block;
+      flex: 1;
     }
 
     .qr-column {
@@ -100,7 +107,18 @@
       max-width: 130px;
     }
 
-    /* CELULAR: sem QR, app ocupando a tela inteira */
+    /* Aviso só no celular */
+    .mobile-note {
+      display: none;
+      font-size: 11px;
+      background: #fff7cc;
+      color: #333;
+      padding: 6px 8px;
+      text-align: center;
+      border-bottom: 1px solid #e0cf80;
+    }
+
+    /* CELULAR: sem QR, app tela cheia, aviso aparece */
     @media (max-width: 900px) {
       html, body {
         overflow: hidden;
@@ -122,6 +140,10 @@
         border-radius: 0;
         box-shadow: none;
       }
+
+      .mobile-note {
+        display: block;
+      }
     }
   </style>
 
@@ -139,6 +161,15 @@
       if (qrAndroid) qrAndroid.src = qrBase + encodeURIComponent(ANDROID_LINK);
       if (qrIOS) qrIOS.src = qrBase + encodeURIComponent(IOS_LINK);
     };
+
+    // Registrar service worker (PWA)
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("/sw.js").catch(function (err) {
+          console.log("SW erro:", err);
+        });
+      });
+    }
   </script>
 </head>
 <body>
@@ -160,6 +191,12 @@
 
     <!-- App Power Apps -->
     <div class="app-column">
+      <div class="mobile-note">
+        Para usar câmera, código de barras e outros recursos avançados, recomendamos
+        abrir este app no aplicativo <b>Microsoft Power Apps</b>. Use os QR codes nas laterais (no computador)
+        para instalar na loja oficial.
+      </div>
+
       <iframe
         src="https://apps.powerapps.com/play/e/default-25285881-44cf-4c96-af0c-36d28792f507/a/c49d68cb-c1d5-48e7-91e5-c3fd5540c12f?tenantId=25285881-44cf-4c96-af0c-36d28792f507&hidenavbar=true">
       </iframe>
