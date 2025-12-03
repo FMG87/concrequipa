@@ -11,7 +11,7 @@
       padding: 0;
       height: 100%;
       width: 100%;
-      background: #444;
+      background: #000;
       font-family: Arial, sans-serif;
       overflow: hidden;
     }
@@ -30,7 +30,7 @@
     .app-column {
       flex: 1;
       height: 100%;
-      max-width: 480px; /* “tela de celular” centralizada no desktop */
+      max-width: 480px; /* “tela de celular” no desktop */
       box-shadow: 0 0 18px rgba(0,0,0,0.4);
       border-radius: 12px;
       overflow: hidden;
@@ -100,17 +100,25 @@
       max-width: 130px;
     }
 
-    /* No celular: esconder as colunas de QR e deixar o app 100% tela */
+    /* CELULAR: sem QR, app ocupando a tela inteira */
     @media (max-width: 900px) {
+      html, body {
+        overflow: hidden;
+        background: #000;
+      }
+
       .wrapper {
         padding: 0;
         gap: 0;
       }
+
       .qr-column {
         display: none;
       }
+
       .app-column {
         max-width: 100%;
+        height: 100vh;
         border-radius: 0;
         box-shadow: none;
       }
@@ -128,20 +136,16 @@
       const qrAndroid = document.getElementById("qrAndroid");
       const qrIOS = document.getElementById("qrIOS");
 
-      if (qrAndroid) {
-        qrAndroid.src = qrBase + encodeURIComponent(ANDROID_LINK);
-      }
-      if (qrIOS) {
-        qrIOS.src = qrBase + encodeURIComponent(IOS_LINK);
-      }
+      if (qrAndroid) qrAndroid.src = qrBase + encodeURIComponent(ANDROID_LINK);
+      if (qrIOS) qrIOS.src = qrBase + encodeURIComponent(IOS_LINK);
     };
   </script>
 </head>
 <body>
 
   <div class="wrapper">
-    <!-- QR para Android (esquerda) -->
-    <div class="qr-column desktop-only">
+    <!-- QR Android (esquerda) -->
+    <div class="qr-column">
       <div class="qr-box">
         <div class="qr-label">
           <span class="icon-pill android">🤖</span>
@@ -154,15 +158,15 @@
       </div>
     </div>
 
-    <!-- App Power Apps central -->
+    <!-- App Power Apps -->
     <div class="app-column">
       <iframe
         src="https://apps.powerapps.com/play/e/default-25285881-44cf-4c96-af0c-36d28792f507/a/c49d68cb-c1d5-48e7-91e5-c3fd5540c12f?tenantId=25285881-44cf-4c96-af0c-36d28792f507&hidenavbar=true">
       </iframe>
     </div>
 
-    <!-- QR para Apple (direita) -->
-    <div class="qr-column desktop-only">
+    <!-- QR Apple (direita) -->
+    <div class="qr-column">
       <div class="qr-box">
         <div class="qr-label">
           <span class="icon-pill"></span>
