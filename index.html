@@ -11,101 +11,169 @@
       padding: 0;
       height: 100%;
       width: 100%;
-      background: #f2f2f2;
+      background: #444;
       font-family: Arial, sans-serif;
       overflow: hidden;
     }
 
-    /* Container responsivo */
-    .app-container {
-      width: 100%;
-      height: 100%;
+    .wrapper {
       display: flex;
-      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
       align-items: center;
       justify-content: center;
+      box-sizing: border-box;
+      padding: 10px;
+      gap: 10px;
     }
 
-    /* Web: exibe QR Code */
-    .web-content {
-      text-align: center;
-      display: none;
+    .app-column {
+      flex: 1;
+      height: 100%;
+      max-width: 480px; /* “tela de celular” centralizada no desktop */
+      box-shadow: 0 0 18px rgba(0,0,0,0.4);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
     }
 
-    .qr-box {
-      padding: 20px;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.15);
-      display: inline-block;
-    }
-
-    .qr-box img {
-      width: 220px;
-      height: 220px;
-    }
-
-    .download-text {
-      font-size: 18px;
-      margin-top: 15px;
-    }
-
-    /* Mobile: iframe ocupa a tela toda */
     iframe {
       width: 100%;
       height: 100%;
       border: none;
-      display: none;
+      display: block;
     }
 
-    /* Exibe iframe somente no celular */
+    .qr-column {
+      width: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-box {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 12px 10px 14px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.35);
+      text-align: center;
+    }
+
+    .qr-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .icon-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #000;
+      color: #fff;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .icon-pill.android {
+      background: #3ddc84; /* verde Android */
+      color: #000;
+    }
+
+    .qr-box img {
+      width: 120px;
+      height: 120px;
+      display: block;
+    }
+
+    .qr-caption {
+      margin-top: 6px;
+      font-size: 11px;
+      color: #444;
+      max-width: 130px;
+    }
+
+    /* No celular: esconder as colunas de QR e deixar o app 100% tela */
     @media (max-width: 900px) {
-      iframe { display: block; }
-    }
-
-    /* Exibe QR code apenas no desktop */
-    @media (min-width: 901px) {
-      .web-content { display: block; }
+      .wrapper {
+        padding: 0;
+        gap: 0;
+      }
+      .qr-column {
+        display: none;
+      }
+      .app-column {
+        max-width: 100%;
+        border-radius: 0;
+        box-shadow: none;
+      }
     }
   </style>
 
   <script>
-    // Detectar tipo de celular via User-Agent
-    function getDownloadLink() {
-      const ua = navigator.userAgent;
-
-      if (/android/i.test(ua)) {
-        return "https://play.google.com/store/apps/details?id=com.microsoft.msapps";
-      }
-      if (/iPhone|iPad|iPod/i.test(ua)) {
-        return "https://apps.apple.com/br/app/power-apps/id1047318566";
-      }
-      return "https://aka.ms/powerappsstore";
-    }
+    // Links oficiais do Power Apps nas lojas
+    const ANDROID_LINK = "https://play.google.com/store/apps/details?id=com.microsoft.msapps";
+    const IOS_LINK = "https://apps.apple.com/br/app/power-apps/id1047318566";
 
     window.onload = function () {
-      const qrImg = document.getElementById("qrImage");
-      const qrAPI = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=";
+      const qrBase = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=";
 
-      qrImg.src = qrAPI + encodeURIComponent(getDownloadLink());
+      const qrAndroid = document.getElementById("qrAndroid");
+      const qrIOS = document.getElementById("qrIOS");
+
+      if (qrAndroid) {
+        qrAndroid.src = qrBase + encodeURIComponent(ANDROID_LINK);
+      }
+      if (qrIOS) {
+        qrIOS.src = qrBase + encodeURIComponent(IOS_LINK);
+      }
     };
   </script>
-
 </head>
 <body>
 
-  <!-- MOBILE APP -->
-  <iframe src="https://apps.powerapps.com/play/e/default-25285881-44cf-4c96-af0c-36d28792f507/a/c49d68cb-c1d5-48e7-91e5-c3fd5540c12f?tenantId=25285881-44cf-4c96-af0c-36d28792f507&hidenavbar=true"></iframe>
-
-  <!-- DESKTOP + QR CODE -->
-  <div class="app-container web-content">
-    <h2>Baixe o aplicativo para usar no celular</h2>
-
-    <div class="qr-box">
-      <img id="qrImage" src="" alt="QR Code para baixar o aplicativo Power Apps">
+  <div class="wrapper">
+    <!-- QR para Android (esquerda) -->
+    <div class="qr-column desktop-only">
+      <div class="qr-box">
+        <div class="qr-label">
+          <span class="icon-pill android">🤖</span>
+          <span>Android</span>
+        </div>
+        <img id="qrAndroid" alt="QR Code para baixar o Power Apps na Play Store">
+        <div class="qr-caption">
+          Aponte a câmera do celular para baixar o Power Apps na Play Store.
+        </div>
+      </div>
     </div>
 
-    <p class="download-text">Aponte a câmera do celular para instalar o Power Apps.</p>
+    <!-- App Power Apps central -->
+    <div class="app-column">
+      <iframe
+        src="https://apps.powerapps.com/play/e/default-25285881-44cf-4c96-af0c-36d28792f507/a/c49d68cb-c1d5-48e7-91e5-c3fd5540c12f?tenantId=25285881-44cf-4c96-af0c-36d28792f507&hidenavbar=true">
+      </iframe>
+    </div>
+
+    <!-- QR para Apple (direita) -->
+    <div class="qr-column desktop-only">
+      <div class="qr-box">
+        <div class="qr-label">
+          <span class="icon-pill"></span>
+          <span>Apple</span>
+        </div>
+        <img id="qrIOS" alt="QR Code para baixar o Power Apps na App Store">
+        <div class="qr-caption">
+          Aponte a câmera do iPhone para baixar o Power Apps na App Store.
+        </div>
+      </div>
+    </div>
   </div>
 
 </body>
