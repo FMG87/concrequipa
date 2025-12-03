@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
   <title>Concrequipa</title>
 
   <!-- PWA -->
@@ -22,13 +22,20 @@
 
     .wrapper {
       display: flex;
-      height: 100vh;
+      height: 100vh;      /* fallback */
       width: 100vw;
       align-items: center;
       justify-content: center;
       box-sizing: border-box;
       padding: 10px;
       gap: 10px;
+    }
+
+    /* Para navegadores que suportam dvh (iOS mais novo, Android etc.) */
+    @supports (height: 100dvh) {
+      .wrapper {
+        height: 100dvh;
+      }
     }
 
     .app-column {
@@ -128,6 +135,14 @@
       .wrapper {
         padding: 0;
         gap: 0;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      @supports (height: 100dvh) {
+        .wrapper {
+          height: 100dvh;
+        }
       }
 
       .qr-column {
@@ -136,9 +151,20 @@
 
       .app-column {
         max-width: 100%;
+        width: 100vw;
         height: 100vh;
         border-radius: 0;
         box-shadow: none;
+      }
+
+      @supports (height: 100dvh) {
+        .app-column {
+          height: 100dvh;
+        }
+      }
+
+      iframe {
+        height: 100%;
       }
 
       .mobile-note {
@@ -175,7 +201,7 @@
 <body>
 
   <div class="wrapper">
-    <!-- QR Android (esquerda) -->
+    <!-- QR Android (esquerda) - só desktop -->
     <div class="qr-column">
       <div class="qr-box">
         <div class="qr-label">
@@ -202,7 +228,7 @@
       </iframe>
     </div>
 
-    <!-- QR Apple (direita) -->
+    <!-- QR Apple (direita) - só desktop -->
     <div class="qr-column">
       <div class="qr-box">
         <div class="qr-label">
